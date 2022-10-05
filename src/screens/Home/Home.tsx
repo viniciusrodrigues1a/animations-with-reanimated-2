@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, StatusBar, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation, NavigationProp} from '@react-navigation/native';
 import {
   MainNavigationParams,
@@ -17,7 +17,7 @@ type ScreenProp = {
 const screensList: ScreenProp[] = [
   {
     title: 'Move circle and snap to drop zones',
-    route: MAIN_NAVIGATION_ROUTES.HOME,
+    route: MAIN_NAVIGATION_ROUTES.MOVE_CIRCLE_WITH_PAN,
   },
 ];
 
@@ -45,12 +45,18 @@ export const Home = () => {
   );
 
   return (
-    <FlatList
-      data={screensList}
-      keyExtractor={item => item.route}
-      ListHeaderComponent={ListHeaderComponent}
-      renderItem={renderItem}
-      ItemSeparatorComponent={itemSeparator}
-    />
+    <>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
+      <View style={styles.container}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={screensList}
+          keyExtractor={item => item.route}
+          ListHeaderComponent={ListHeaderComponent}
+          renderItem={renderItem}
+          ItemSeparatorComponent={itemSeparator}
+        />
+      </View>
+    </>
   );
 };

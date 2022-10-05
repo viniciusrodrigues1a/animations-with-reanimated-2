@@ -1,11 +1,16 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#FFF',
+    flex: 1,
+  },
   itemContainer: {
-    padding: 16,
+    padding: 20,
   },
   itemText: {
     fontSize: 16,
+    color: '#222',
   },
   itemSeparatorWrapper: {
     paddingHorizontal: 16,
