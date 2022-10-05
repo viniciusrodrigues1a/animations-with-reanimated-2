@@ -197,14 +197,41 @@ export const MoveCircleWithPan = () => {
 
         const cursor = {x: event.absoluteX, y: event.absoluteY};
 
-        const square = {
+        const yellowSquare = {
           x0: yellowBoxX0,
           x1: yellowBoxX1,
           y0: yellowBoxY0,
           y1: yellowBoxY1,
         };
 
-        if (hasCursorCollidedWith(cursor, square).didCollide) {
+        if (redBoxXY) {
+          const redBoxX0 = redBoxXY.x;
+          const redBoxX1 = redBoxXY.x + RED_BOX_WIDTH;
+
+          const redBoxY0 = redBoxXY.y;
+          const redBoxY1 = redBoxXY.y + RED_BOX_HEIGHT;
+
+          const redSquare = {
+            x0: redBoxX0,
+            x1: redBoxX1,
+            y0: redBoxY0,
+            y1: redBoxY1,
+          };
+          const {didCollideH} = hasCursorCollidedWith(cursor, redSquare);
+
+          const isLockedOnTopOfRedBoxWithCursorOnBottom =
+            didCollideH &&
+            y.value === redBoxY0 - CIRCUMFERENCE &&
+            event.absoluteY >= redBoxY1;
+
+          if (isLockedOnTopOfRedBoxWithCursorOnBottom) {
+            x.value = withSpring(halfWidthCircleOrigin);
+            y.value = withSpring(initialYPosition);
+            return;
+          }
+        }
+
+        if (hasCursorCollidedWith(cursor, yellowSquare).didCollide) {
           x.value = withSpring(halfWidthCircleOrigin);
           const centerYOfYellowBox = yellowBoxXY.y + YELLOW_BOX_HEIGHT / 2;
           y.value = withSpring(centerYOfYellowBox - RADIUS);
