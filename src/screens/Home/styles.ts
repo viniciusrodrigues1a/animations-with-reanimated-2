@@ -17,8 +17,8 @@ export const styles = StyleSheet.create({
   },
   itemSeparator: {
     width: '100%',
-    height: 1,
-    backgroundColor: '#CDCDCD',
+    height: 2,
+    backgroundColor: '#c6c6c655',
   },
   titleText: {
     fontSize: 20,

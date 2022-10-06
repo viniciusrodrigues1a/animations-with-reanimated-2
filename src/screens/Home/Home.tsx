@@ -19,6 +19,10 @@ const screensList: ScreenProp[] = [
     title: 'Move circle and snap to drop zones',
     route: MAIN_NAVIGATION_ROUTES.MOVE_CIRCLE_WITH_PAN,
   },
+  {
+    title: 'Move and pinch image',
+    route: MAIN_NAVIGATION_ROUTES.MOVE_AND_PINCH_IMAGE,
+  },
 ];
 
 export const Home = () => {
