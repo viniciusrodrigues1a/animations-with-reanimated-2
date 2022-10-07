@@ -1,11 +1,18 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Dimensions, StatusBar, StyleSheet, View, Text} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
+  cancelAnimation,
+  Easing,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
+  withRepeat,
   withSpring,
+  withTiming,
 } from 'react-native-reanimated';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Icon} from '../../components/Icon';
 
 const CIRCUMFERENCE = 40;
 const RADIUS = CIRCUMFERENCE / 2;
@@ -30,13 +37,47 @@ type SquareXY = {
 
 export const MoveCircleWithPan = () => {
   const {width: windowWidth, height: windowHeight} = Dimensions.get('window');
+  const {top} = useSafeAreaInsets();
+
   const halfWidthCircleOrigin = windowWidth / 2 - RADIUS;
   const initialYPosition = windowHeight / 5;
+
   const x = useSharedValue(halfWidthCircleOrigin);
   const y = useSharedValue(initialYPosition);
 
+  const iconX = useSharedValue(windowWidth / 2 - 75 + 30);
+  const iconOpacity = useSharedValue(1);
+
   const [yellowBoxXY, setYellowBoxXY] = useState<XY | null>(null);
   const [redBoxXY, setRedBoxXY] = useState<XY | null>(null);
+
+  const [hasFinishedTutorial, setHasFinishedTutorial] = useState(false);
+
+  const finishTutorial = () => setHasFinishedTutorial(true);
+
+  useEffect(() => {
+    iconX.value = withRepeat(
+      withTiming(windowWidth, {
+        duration: 750,
+        easing: Easing.circle,
+      }),
+      -1,
+    );
+    iconOpacity.value = withRepeat(
+      withTiming(0, {
+        duration: 750,
+        easing: Easing.ease,
+      }),
+      -1,
+    );
+  });
+
+  useEffect(() => {
+    if (hasFinishedTutorial) {
+      cancelAnimation(iconX);
+      cancelAnimation(iconOpacity);
+    }
+  }, [hasFinishedTutorial, iconX, iconOpacity]);
 
   const hasCursorCollidedWith = (
     cursor: XY,
@@ -59,6 +100,8 @@ export const MoveCircleWithPan = () => {
 
   const gesture = Gesture.Pan()
     .onUpdate(event => {
+      runOnJS(finishTutorial)();
+
       const absoluteXCircleOrigin = event.absoluteX - RADIUS;
       const absoluteYCircleOrigin = event.absoluteY - RADIUS;
 
@@ -249,38 +292,78 @@ export const MoveCircleWithPan = () => {
     left: x.value,
   }));
 
+  const iconStyles = useAnimatedStyle(() => ({
+    opacity: iconOpacity.value,
+    left: iconX.value,
+    top: windowHeight / 5 - RADIUS - 6 + top,
+  }));
+
   return (
     <GestureDetector gesture={gesture}>
-      <View style={styles.container}>
-        <View
-          style={styles.yellowBox}
-          onLayout={e => {
-            const layout = e.nativeEvent.layout;
-            setYellowBoxXY({x: layout.x, y: layout.y});
-          }}>
-          <Text style={styles.yellowBoxText}>DROP HERE</Text>
-        </View>
-
-        <View
-          style={styles.redBox}
-          onLayout={e => {
-            const layout = e.nativeEvent.layout;
-            setRedBoxXY({x: layout.x, y: layout.y});
-          }}
+      <View style={styles.wrapperView}>
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="#FFFFFF00"
+          translucent
         />
+        {!hasFinishedTutorial && (
+          <>
+            <Animated.View style={[styles.iconTutorial, iconStyles]}>
+              <Icon name="PanGesture" size={150} color="#000" />
+            </Animated.View>
 
-        <Animated.View style={[styles.circle, animStyles]} />
+            <View style={styles.tutorialOverlay} />
+          </>
+        )}
+
+        <SafeAreaView style={StyleSheet.absoluteFill}>
+          <View style={styles.container}>
+            <View
+              style={styles.yellowBox}
+              onLayout={e => {
+                const layout = e.nativeEvent.layout;
+                setYellowBoxXY({x: layout.x, y: layout.y});
+              }}>
+              <Text style={styles.yellowBoxText}>DROP HERE</Text>
+            </View>
+
+            <View
+              style={styles.redBox}
+              onLayout={e => {
+                const layout = e.nativeEvent.layout;
+                setRedBoxXY({x: layout.x, y: layout.y});
+              }}
+            />
+
+            <Animated.View style={[styles.circle, animStyles]} />
+          </View>
+        </SafeAreaView>
       </View>
     </GestureDetector>
   );
 };
 
 const styles = StyleSheet.create({
+  wrapperView: {
+    flex: 1,
+    backgroundColor: '#FFF',
+  },
   container: {
     flex: 1,
     backgroundColor: '#FFF',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  tutorialOverlay: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    zIndex: 1,
+  },
+  iconTutorial: {
+    position: 'absolute',
+    zIndex: 2,
   },
   yellowBox: {
     position: 'absolute',
