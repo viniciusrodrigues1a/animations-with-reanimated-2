@@ -191,38 +191,50 @@ export const MoveCircleWithPan = () => {
       const hasHitRightEdge = event.absoluteX + RADIUS >= windowWidth;
       const hasHitBottomEdge = event.absoluteY + CIRCUMFERENCE >= windowHeight;
 
+      if (hasHitBottomEdge && hasHitLeftEdge) {
+        x.value = withTiming(0);
+        y.value = withTiming(windowHeight - CIRCUMFERENCE - RADIUS - 4);
+        return;
+      }
+
+      if (hasHitBottomEdge && hasHitRightEdge) {
+        x.value = withTiming(windowWidth - CIRCUMFERENCE);
+        y.value = withTiming(windowHeight - CIRCUMFERENCE - RADIUS - 4);
+        return;
+      }
+
       if (hasHitBottomEdge) {
         x.value = absoluteXCircleOrigin;
-        y.value = withSpring(windowHeight - CIRCUMFERENCE - RADIUS - 4);
+        y.value = withTiming(windowHeight - CIRCUMFERENCE - RADIUS - 4);
         return;
       }
 
       if (hasHitTopEdge && hasHitLeftEdge) {
-        x.value = withSpring(0);
-        y.value = withSpring(statusBarHeight - RADIUS - 4);
+        x.value = withTiming(0);
+        y.value = withTiming(statusBarHeight - RADIUS - 4);
         return;
       }
 
       if (hasHitTopEdge && hasHitRightEdge) {
-        x.value = withSpring(windowWidth - CIRCUMFERENCE);
-        y.value = withSpring(statusBarHeight - RADIUS - 4);
+        x.value = withTiming(windowWidth - CIRCUMFERENCE);
+        y.value = withTiming(statusBarHeight - RADIUS - 4);
         return;
       }
 
       if (hasHitTopEdge) {
         x.value = absoluteXCircleOrigin;
-        y.value = withSpring(statusBarHeight - RADIUS - 4);
+        y.value = withTiming(statusBarHeight - RADIUS - 4);
         return;
       }
 
       if (hasHitLeftEdge) {
-        x.value = withSpring(0);
+        x.value = withTiming(0);
         y.value = absoluteYCircleOrigin;
         return;
       }
 
       if (hasHitRightEdge) {
-        x.value = withSpring(windowWidth - CIRCUMFERENCE);
+        x.value = withTiming(windowWidth - CIRCUMFERENCE);
         y.value = absoluteYCircleOrigin;
         return;
       }
