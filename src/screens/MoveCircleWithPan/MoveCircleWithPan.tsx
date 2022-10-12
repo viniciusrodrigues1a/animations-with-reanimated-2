@@ -70,7 +70,7 @@ export const MoveCircleWithPan = () => {
       }),
       -1,
     );
-  });
+  }, []);
 
   useEffect(() => {
     if (hasFinishedTutorial) {

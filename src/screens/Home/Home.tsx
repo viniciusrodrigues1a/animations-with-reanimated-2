@@ -23,6 +23,10 @@ const screensList: ScreenProp[] = [
     title: 'Move and pinch image',
     route: MAIN_NAVIGATION_ROUTES.MOVE_AND_PINCH_IMAGE,
   },
+  {
+    title: 'Double tap',
+    route: MAIN_NAVIGATION_ROUTES.DOUBLE_TAP,
+  },
 ];
 
 export const Home = () => {

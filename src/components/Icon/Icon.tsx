@@ -4,7 +4,7 @@ import {SvgProps} from './Icons/types';
 
 type IconProps = {
   name: keyof typeof icons;
-  size: number;
+  size: number | string;
   color: string;
 };
 

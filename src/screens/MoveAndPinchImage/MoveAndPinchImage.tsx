@@ -43,7 +43,7 @@ export const MoveAndPinchImage = () => {
       }),
       -1,
     );
-  });
+  }, []);
 
   const panGesture = Gesture.Pan()
     .onUpdate(e => {
