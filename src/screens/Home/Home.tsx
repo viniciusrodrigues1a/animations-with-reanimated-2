@@ -27,6 +27,10 @@ const screensList: ScreenProp[] = [
     title: 'Double tap',
     route: MAIN_NAVIGATION_ROUTES.DOUBLE_TAP,
   },
+  {
+    title: 'Shapes alignment snap',
+    route: MAIN_NAVIGATION_ROUTES.ELEMENTS_ALIGNMENT_SNAP,
+  },
 ];
 
 export const Home = () => {

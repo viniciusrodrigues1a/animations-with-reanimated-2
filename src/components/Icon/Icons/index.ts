@@ -1,3 +1,4 @@
+import {AddIcon} from './AddIcon';
 import {HeartIcon} from './HeartIcon';
 import {PanGestureIcon} from './PanGestureIcon';
 import {PinchGestureIcon} from './PinchGestureIcon';
@@ -8,4 +9,5 @@ export const icons = {
   PinchGesture: PinchGestureIcon,
   TapGesture: TapGestureIcon,
   Heart: HeartIcon,
+  Add: AddIcon,
 };
